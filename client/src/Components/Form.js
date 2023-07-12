@@ -26,6 +26,7 @@ const Form = () => {
     const handleClose = () => {
         setValues(initialState())
     }
+    
     return (
         <div className="container">
             <button
