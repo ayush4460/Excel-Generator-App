@@ -68,11 +68,11 @@ const Form = () => {
                                         <label>Name</label>
                                         <input type="text" placeholder="Enter Name" value={values.name} onChange={(e) => setValues({...values, name:e.target.value})} />
                                     </Row>
-                                    <Row>
+                                    <Row className="mt-3">
                                         <label>Email</label>
                                         <input type="email" placeholder="Enter Email" value={values.email} onChange={(e) => setValues({...values,email:e.target.value})} />
                                     </Row>
-                                    <Row>
+                                    <Row className="mt-3">
                                         <label>Phone Number</label>
                                         <input type="text" placeholder="Enter Phone" value={values.phone} onChange={(e) => setValues({...values,phone:e.target.value})} />
                                     </Row>
@@ -94,7 +94,7 @@ const Form = () => {
                                         />
                                     </div>
 
-                                    <Row>
+                                    <Row className="mt-3"> 
                                         <label>Message</label>
                                         <textarea
                                             name="message"
