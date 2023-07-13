@@ -178,6 +178,7 @@ const Form = () => {
             <th>Phone</th>
             <th>Gender</th>
             <th>Message</th>
+            <th>Button</th>
           </tr>
         </thead>
         <tbody>
@@ -188,6 +189,10 @@ const Form = () => {
               <td>{item.Phone}</td>
               <td>{item.Gender}</td>
               <td>{item.Message}</td>
+              <td>
+                <button>Edit</button>
+                <button>Delete</button>
+              </td>
             </tr>
           ))}
         </tbody>
