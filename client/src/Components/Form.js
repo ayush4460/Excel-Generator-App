@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Col, Row } from "react-bootstrap";
-
+import { createOperation } from "../functions/functions";
 const Form = () => {
 
     const initialState=()=>{
@@ -13,19 +13,40 @@ const Form = () => {
         }
     }
 
+
+
     const [values,setValues] = useState(initialState())
 
-    const handleSave = () => {
-        console.log("Name:", values.name)
-        console.log("Email:", values.email)
-        console.log("Phone:", values.phone)
-        console.log("Gender:", values.gender)
-        console.log("Message:", values.message)
-    }
+    const handleSave = async () => {
+        try {
+          await createOperation({
+            Name: values.name,
+            Email: values.email,
+            Phone: values.phone,
+            Gender: values.gender,
+            Message: values.message
+          });
+      
+          console.log("Data saved successfully!");
+          console.log("Name:", values.name);
+          console.log("Email:", values.email);
+          console.log("Phone:", values.phone);
+          console.log("Gender:", values.gender);
+          console.log("Message:", values.message);
+
+          setValues(initialState());
+
+        } catch (error) {
+          console.error("Error while saving data:", error);
+        }
+      };
+      
 
     const handleClose = () => {
         setValues(initialState())
     }
+
+    
     
     return (
         <div className="container">
@@ -118,13 +139,15 @@ const Form = () => {
                             >
                                 Close
                             </button>
-                            <button type="button" className="btn btn-success" onClick={handleSave}>
+                            <button type="button" data-dismiss="modal" className="btn btn-success" onClick={handleSave}>
                                 Save
                             </button>
                         </div>
                     </div>
                 </div>
             </div>
+
+           
         </div>
     );
 };
