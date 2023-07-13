@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Col, Row } from "react-bootstrap";
 import { createOperation } from "../functions/functions";
+import axios from 'axios'
 const Form = () => {
 
     const initialState=()=>{
@@ -35,6 +36,7 @@ const Form = () => {
           console.log("Message:", values.message);
 
           setValues(initialState());
+          fetchData();
 
         } catch (error) {
           console.error("Error while saving data:", error);
@@ -46,8 +48,28 @@ const Form = () => {
         setValues(initialState())
     }
 
+    const [data, setData] = useState([]);
+    useEffect(() => {
+        fetchData();
+      }, []);
     
-    
+      const fetchData = async () => {
+        try {
+          const response = await axios.post('http://localhost:8000/api/list', {
+            skip: 0,
+            per_page: 10,
+            sorton: 'createdAt',
+            sortdir: 'desc',
+            match: ''
+          });
+      
+          const fetchedData = response.data[0]?.data || [];
+          setData(fetchedData);
+        } catch (error) {
+          console.error('Error while fetching data:', error);
+        }
+      };
+      
     return (
         <div className="container">
             <button
@@ -146,7 +168,31 @@ const Form = () => {
                     </div>
                 </div>
             </div>
-
+            <div>
+      <h1>Data List</h1>
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Gender</th>
+            <th>Message</th>
+          </tr>
+        </thead>
+        <tbody>
+          {data.map((item) => (
+            <tr key={item._id}>
+              <td>{item.Name}</td>
+              <td>{item.Email}</td>
+              <td>{item.Phone}</td>
+              <td>{item.Gender}</td>
+              <td>{item.Message}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
            
         </div>
     );
