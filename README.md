@@ -8,7 +8,7 @@ This web application built with React allows users to manage and export data in 
 - Export the data as an Excel file for easy sharing and analysis.
 
 ## Technologies Used
--Frontend: React.js
+- Frontend: React.js
 - Backend: Node.js, Express.js
 - Database: MongoDB
 - Libraries: react-bootstrap, axios, react-toastify, mongoose
