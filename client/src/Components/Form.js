@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Col, Row } from "react-bootstrap";
-import { createOperation } from "../functions/functions";
+import { createOperation , updateOperation , getOperationById , deleteOperation} from "../functions/functions";
 import axios from 'axios'
 const Form = () => {
 
@@ -15,11 +15,12 @@ const Form = () => {
     }
 
 
-
+    const [editRecordId, setEditRecordId] = useState(null);
     const [values,setValues] = useState(initialState())
 
     const handleSave = async () => {
         try {
+          if (!editRecordId) {
           await createOperation({
             Name: values.name,
             Email: values.email,
@@ -37,12 +38,57 @@ const Form = () => {
 
           setValues(initialState());
           fetchData();
-
+        } else {
+          // If editRecordId is not null, it means it's an existing record
+          await handleUpdate(editRecordId, values );
+          console.log("Data updated successfully!");
+        }
         } catch (error) {
-          console.error("Error while saving data:", error);
+          console.error("Error while saving data:", error.message);
+        }
+      };
+      const handleUpdate = async (_id, values) => {
+        try {
+          await updateOperation(_id, values); // Use the PUT request to update existing data
+          console.log("Data updated successfully!");
+      
+          // Optionally, you can fetch the data again after the update to refresh the list
+          fetchData();
+        } catch (error) {
+          console.error("Error while updating data:", error.message);
         }
       };
       
+      const handleDelete = async (_id) => {
+        try {
+          await deleteOperation(_id);
+          fetchData();
+        } catch (error) {
+          console.error("Failed to delete", error.message);
+        }
+      };
+      
+      const handleTog_edit = async (_id) => {
+        console.log(_id);
+        try {
+          const response = await getOperationById(_id);
+          console.log("get", response.data.service);
+          const data = response.data.service; // Extract the data from the response
+          setValues({
+            ...values,
+            name: data.Name,
+            email: data.Email,
+            phone: data.Phone,
+            gender: data.Gender,
+            message: data.Message,
+          });
+        } catch (error) {
+          console.error("Failed to get", error.message);
+        }
+      };
+      
+      
+
 
     const handleClose = () => {
         setValues(initialState())
@@ -190,8 +236,17 @@ const Form = () => {
               <td>{item.Gender}</td>
               <td>{item.Message}</td>
               <td>
-                <button>Edit</button>
-                <button>Delete</button>
+              <button
+                type="button"
+                className="btn btn-primary"
+                data-toggle="modal"
+                data-target="#exampleModalCenter"
+                onClick={() => handleTog_edit(item._id)}
+            >
+                Edit
+            </button>
+            
+                <button style={{height:"35px"}} className="btn btn-danger" onClick={()=>{handleDelete(item._id)}}>Delete</button>
               </td>
             </tr>
           ))}

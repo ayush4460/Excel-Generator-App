@@ -33,6 +33,59 @@ app.post('/api/create', async (req, res) => {
   }
 });
 
+app.put('/api/update/:id', async(req , res) => {
+  try {
+    const update = await ExcelModel.findByIdAndUpdate(req.params.id , req.body,{
+      new: true,
+    })
+    res.status(200).json({
+      message:"Update operation successfully performed",
+      success: true,
+      service: update,
+    })
+  } catch (error) {
+    console.error("Error in update API", error.message);
+    res.status(500).json({
+      message: 'Failed to update',
+      success: false
+    })
+  }
+})
+
+app.get('/api/get/:id', async(req , res) => {
+  try {
+    const get = await ExcelModel.findOne({_id : req.params.id }).exec();
+    res.status(200).json({
+      message:"Detail fetched",
+      success: true,
+      service: get,
+    })
+  } catch (error) {
+    console.error("Error in get API:", error.message);
+    res.status(500).json({
+      message: 'Failed to get',
+      success: false
+    })
+  }
+})
+
+app.delete('/api/delete/:id', async(req,res)=>{
+  try {
+    const deleteDetail = await ExcelModel.findByIdAndDelete(req.params.id)
+    res.status(200).json({
+      message:"Detail Successfully Deleted",
+      success: true,
+      service: deleteDetail
+    })
+  } catch (error) {
+    console.error("Error deleting API", error.message);
+    res.status(500).json({
+      message:"Failed to delete",
+      success: false
+    })
+  }
+})
+
 app.post('/api/list', async (req, res) => {
   try {
     let {
