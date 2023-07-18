@@ -21,7 +21,6 @@ const Form = () => {
       message: "",
     };
   };
-
   const [editRecordId, setEditRecordId] = useState(null);
   const [values, setValues] = useState(initialState());
 
@@ -54,9 +53,16 @@ const Form = () => {
       toast.error("Failed to save detail");
     }
   };
-  const handleUpdate = async (_id, values) => {
+
+  const handleUpdate = async (id, values) => {
     try {
-      await updateOperation(_id, values);
+      await updateOperation(id, {
+        Name: values.name,
+        Email: values.email,
+        Phone: values.phone,
+        Gender: values.gender,
+        Message: values.message,
+      });
       console.log("Data updated successfully!");
       toast.success("Detail Successfully updated");
       fetchData();
@@ -89,7 +95,7 @@ const Form = () => {
 
       const a = document.createElement("a");
       a.href = downloadLink;
-      a.download = "excel.xlsx";
+      a.download = "data.xlsx";
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
@@ -116,6 +122,8 @@ const Form = () => {
         gender: data.Gender,
         message: data.Message,
       });
+
+      setEditRecordId(_id); // Set the editRecordId state to the _id
     } catch (error) {
       console.error("Failed to get", error.message);
     }

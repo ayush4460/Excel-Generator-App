@@ -44,6 +44,7 @@ app.put("/api/update/:id", async (req, res) => {
       success: true,
       service: update,
     });
+    console.log(update);
   } catch (error) {
     console.error("Error in update API", error.message);
     res.status(500).json({
@@ -246,7 +247,7 @@ app.post("/api/excel", async (req, res) => {
       "Content-Type",
       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
     );
-    res.setHeader("Content-Disposition", 'attachment; filename="excel.xlsx"');
+    res.setHeader("Content-Disposition", 'attachment; filename="data.xlsx"');
 
     await workbook.xlsx.write(res);
 
