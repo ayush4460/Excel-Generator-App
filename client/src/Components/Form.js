@@ -42,7 +42,6 @@ const Form = () => {
         setValues(initialState());
         fetchData();
       } else {
-        // If editRecordId is not null, it means it's an existing record
         await handleUpdate(editRecordId, values);
         console.log("Data updated successfully!");
       }
@@ -52,10 +51,9 @@ const Form = () => {
   };
   const handleUpdate = async (_id, values) => {
     try {
-      await updateOperation(_id, values); // Use the PUT request to update existing data
+      await updateOperation(_id, values); 
       console.log("Data updated successfully!");
 
-      // Optionally, you can fetch the data again after the update to refresh the list
       fetchData();
     } catch (error) {
       console.error("Error while updating data:", error.message);
@@ -74,15 +72,13 @@ const Form = () => {
   const handleDownload = async () => {
     try {
       const response = await fetch("http://localhost:8000/api/excel", {
-        method: "POST", // Use POST instead of GET
+        method: "POST", 
       });
   
       const blob = await response.blob();
-  
-      // Create a temporary URL for the blob
+
       const downloadLink = URL.createObjectURL(blob);
   
-      // Create an <a> element and trigger the download
       const a = document.createElement("a");
       a.href = downloadLink;
       a.download = "excel.xlsx";
@@ -90,7 +86,6 @@ const Form = () => {
       a.click();
       document.body.removeChild(a);
   
-      // Clean up the temporary URL
       URL.revokeObjectURL(downloadLink);
     } catch (error) {
       console.error("Error downloading file:", error);
@@ -103,7 +98,7 @@ const Form = () => {
     try {
       const response = await getOperationById(_id);
       console.log("get", response.data.service);
-      const data = response.data.service; // Extract the data from the response
+      const data = response.data.service; 
       setValues({
         ...values,
         name: data.Name,
