@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Col, Row } from "react-bootstrap";
+import './Form.css'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import {
   createOperation,
   updateOperation,
@@ -7,6 +10,8 @@ import {
   deleteOperation,
 } from "../functions/functions";
 import axios from "axios";
+
+
 const Form = () => {
   const initialState = () => {
     return {
@@ -38,7 +43,7 @@ const Form = () => {
         console.log("Phone:", values.phone);
         console.log("Gender:", values.gender);
         console.log("Message:", values.message);
-
+        toast.success("Detail Successfully created");
         setValues(initialState());
         fetchData();
       } else {
@@ -47,16 +52,18 @@ const Form = () => {
       }
     } catch (error) {
       console.error("Error while saving data:", error.message);
+      toast.error("Failed to save detail");
     }
   };
   const handleUpdate = async (_id, values) => {
     try {
       await updateOperation(_id, values); 
       console.log("Data updated successfully!");
-
+      toast.success("Detail Successfully updated");
       fetchData();
     } catch (error) {
       console.error("Error while updating data:", error.message);
+      toast.error("Failed to update detail"); 
     }
   };
 
@@ -64,8 +71,10 @@ const Form = () => {
     try {
       await deleteOperation(_id);
       fetchData();
+      toast.error("Detail successfully deleted");
     } catch (error) {
       console.error("Failed to delete", error.message);
+      toast.error("Failed to delete detail"); 
     }
   };
 
@@ -87,8 +96,10 @@ const Form = () => {
       document.body.removeChild(a);
   
       URL.revokeObjectURL(downloadLink);
+      toast.success("Excel successfully exported ")
     } catch (error) {
       console.error("Error downloading file:", error);
+      toast.error("Failed to export excel")
     }
   };
   
@@ -140,6 +151,7 @@ const Form = () => {
 
   return (
     <div className="container">
+      <ToastContainer />
       <button
         type="button"
         className="btn btn-primary"
@@ -275,9 +287,9 @@ const Form = () => {
         </div>
       </div>
       <div>
-        <button className="btn btn-secondary mt-3 mb-3" onClick={handleDownload}> Export Excel</button>
-        <h1>Data List</h1>
-        <table>
+        <button className="btn btn-secondary mt-3 mb-3" onClick={handleDownload}>Export Excel</button>
+        <h2>Details List</h2>
+        <table className="table">
           <thead>
             <tr>
               <th>Name</th>
@@ -285,7 +297,7 @@ const Form = () => {
               <th>Phone</th>
               <th>Gender</th>
               <th>Message</th>
-              <th>Button</th>
+              <th>Edit & Delete</th>
             </tr>
           </thead>
           <tbody>
@@ -299,7 +311,8 @@ const Form = () => {
                 <td>
                   <button
                     type="button"
-                    className="btn btn-primary"
+                    className="btn btn-primary mr-1"
+                    // style={{width:"50px" , height:"35px"}}
                     data-toggle="modal"
                     data-target="#exampleModalCenter"
                     onClick={() => handleTog_edit(item._id)}
