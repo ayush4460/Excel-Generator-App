@@ -280,7 +280,7 @@ const Form = () => {
         </div>
       </div>
       <div>
-        <button className="btn btn-secondary" onClick={handleDownload}>Excel</button>
+        <button className="btn btn-secondary mt-3 mb-3" onClick={handleDownload}> Export Excel</button>
         <h1>Data List</h1>
         <table>
           <thead>
