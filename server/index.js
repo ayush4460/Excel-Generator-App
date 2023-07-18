@@ -236,7 +236,7 @@ app.post("/api/excel", async (req, res) => {
       { header: "Email", key: "Email", width: 20 },
       { header: "Phone", key: "Phone", width: 20 },
       { header: "Gender", key: "Gender", width: 20 },
-      { header: "Message", key: "Message", width: 20 },
+      { header: "Message", key: "Message", width: 30 },
     ];
 
     data.forEach((row) => {
