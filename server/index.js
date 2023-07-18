@@ -178,9 +178,7 @@ app.post("/api/excel", async (req, res) => {
   try {
     let { sorton, sortdir, match } = req.body;
 
-    let query = [
-     
-    ];
+    let query = [];
 
     if (match) {
       query = [
@@ -219,7 +217,7 @@ app.post("/api/excel", async (req, res) => {
     }
 
     const list = await ExcelModel.aggregate(query);
-    console.log("Excel", list)
+    console.log("Excel", list);
     const data = list.map((item) => ({
       Name: item.Name,
       Email: item.Email,
@@ -227,10 +225,10 @@ app.post("/api/excel", async (req, res) => {
       Gender: item.Gender,
       Message: item.Message,
     }));
-  
+
     const workbook = new ExcelJS.Workbook();
     const worksheet = workbook.addWorksheet("Data");
-  
+
     worksheet.columns = [
       // { header: 'Ad ID', key: 'ad_id', width: 15 },
       { header: "Name", key: "Name", width: 20 },
@@ -239,22 +237,19 @@ app.post("/api/excel", async (req, res) => {
       { header: "Gender", key: "Gender", width: 20 },
       { header: "Message", key: "Message", width: 20 },
     ];
-  
+
     data.forEach((row) => {
       worksheet.addRow(row);
     });
-  
+
     res.setHeader(
       "Content-Type",
       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
     );
-    res.setHeader(
-      "Content-Disposition",
-      'attachment; filename="excel.xlsx"'
-    );
-  
+    res.setHeader("Content-Disposition", 'attachment; filename="excel.xlsx"');
+
     await workbook.xlsx.write(res);
-  
+
     console.log("Data exported successfully.");
   } catch (error) {
     console.error("Error in list API", error.message);
