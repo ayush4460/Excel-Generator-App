@@ -231,7 +231,6 @@ app.post("/api/excel", async (req, res) => {
     const worksheet = workbook.addWorksheet("Data");
 
     worksheet.columns = [
-      // { header: 'Ad ID', key: 'ad_id', width: 15 },
       { header: "Name", key: "Name", width: 20 },
       { header: "Email", key: "Email", width: 20 },
       { header: "Phone", key: "Phone", width: 20 },
