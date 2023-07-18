@@ -2,6 +2,7 @@ import express from "express";
 import mongoose from "mongoose";
 import bodyParser from "body-parser";
 import cors from "cors";
+import ExcelJS from "exceljs";
 
 import { ExcelModel } from "./model/model.js";
 
@@ -164,6 +165,97 @@ app.post("/api/list", async (req, res) => {
 
     const list = await ExcelModel.aggregate(query);
     res.json(list);
+  } catch (error) {
+    console.error("Error in list API", error.message);
+    res.status(500).json({
+      message: "Failed to fetch list",
+      success: false,
+    });
+  }
+});
+
+app.post("/api/excel", async (req, res) => {
+  try {
+    let { sorton, sortdir, match } = req.body;
+
+    let query = [
+     
+    ];
+
+    if (match) {
+      query = [
+        {
+          $match: {
+            $or: [
+              {
+                Name: { $regex: match, $options: "i" },
+                Email: { $regex: match, $options: "i" },
+                Phone: { $regex: match, $options: "i" },
+                Gender: { $regex: match, $options: "i" },
+                Message: { $regex: match, $options: "i" },
+              },
+            ],
+          },
+        },
+      ].concat(query);
+    }
+
+    if (sorton && sortdir) {
+      let sort = {};
+      sort[sorton] = sortdir == "desc" ? -1 : 1;
+      query = [
+        {
+          $sort: sort,
+        },
+      ].concat(query);
+    } else {
+      let sort = {};
+      sort["createdAt"] = -1;
+      query = [
+        {
+          $sort: sort,
+        },
+      ].concat(query);
+    }
+
+    const list = await ExcelModel.aggregate(query);
+    console.log("Excel", list)
+    const data = list.map((item) => ({
+      Name: item.Name,
+      Email: item.Email,
+      Phone: item.Phone,
+      Gender: item.Gender,
+      Message: item.Message,
+    }));
+  
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet("Data");
+  
+    worksheet.columns = [
+      // { header: 'Ad ID', key: 'ad_id', width: 15 },
+      { header: "Name", key: "Name", width: 20 },
+      { header: "Email", key: "Email", width: 20 },
+      { header: "Phone", key: "Phone", width: 20 },
+      { header: "Gender", key: "Gender", width: 20 },
+      { header: "Message", key: "Message", width: 20 },
+    ];
+  
+    data.forEach((row) => {
+      worksheet.addRow(row);
+    });
+  
+    res.setHeader(
+      "Content-Type",
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    );
+    res.setHeader(
+      "Content-Disposition",
+      'attachment; filename="excel.xlsx"'
+    );
+  
+    await workbook.xlsx.write(res);
+  
+    console.log("Data exported successfully.");
   } catch (error) {
     console.error("Error in list API", error.message);
     res.status(500).json({

@@ -15,3 +15,4 @@ export const getOperationById = async (id, values) => {
 export const deleteOperation = async (id) => {
   return await axios.delete(`http://localhost:8000/api/delete/${id}`);
 };
+

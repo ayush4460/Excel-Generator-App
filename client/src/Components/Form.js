@@ -71,6 +71,33 @@ const Form = () => {
     }
   };
 
+  const handleDownload = async () => {
+    try {
+      const response = await fetch("http://localhost:8000/api/excel", {
+        method: "POST", // Use POST instead of GET
+      });
+  
+      const blob = await response.blob();
+  
+      // Create a temporary URL for the blob
+      const downloadLink = URL.createObjectURL(blob);
+  
+      // Create an <a> element and trigger the download
+      const a = document.createElement("a");
+      a.href = downloadLink;
+      a.download = "excel.xlsx";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+  
+      // Clean up the temporary URL
+      URL.revokeObjectURL(downloadLink);
+    } catch (error) {
+      console.error("Error downloading file:", error);
+    }
+  };
+  
+
   const handleTog_edit = async (_id) => {
     console.log(_id);
     try {
@@ -253,6 +280,7 @@ const Form = () => {
         </div>
       </div>
       <div>
+        <button className="btn btn-secondary" onClick={handleDownload}>Excel</button>
         <h1>Data List</h1>
         <table>
           <thead>
