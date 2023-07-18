@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Col, Row } from "react-bootstrap";
-import './Form.css'
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import "./Form.css";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import {
   createOperation,
   updateOperation,
@@ -10,7 +10,6 @@ import {
   deleteOperation,
 } from "../functions/functions";
 import axios from "axios";
-
 
 const Form = () => {
   const initialState = () => {
@@ -57,13 +56,13 @@ const Form = () => {
   };
   const handleUpdate = async (_id, values) => {
     try {
-      await updateOperation(_id, values); 
+      await updateOperation(_id, values);
       console.log("Data updated successfully!");
       toast.success("Detail Successfully updated");
       fetchData();
     } catch (error) {
       console.error("Error while updating data:", error.message);
-      toast.error("Failed to update detail"); 
+      toast.error("Failed to update detail");
     }
   };
 
@@ -74,42 +73,41 @@ const Form = () => {
       toast.error("Detail successfully deleted");
     } catch (error) {
       console.error("Failed to delete", error.message);
-      toast.error("Failed to delete detail"); 
+      toast.error("Failed to delete detail");
     }
   };
 
   const handleDownload = async () => {
     try {
       const response = await fetch("http://localhost:8000/api/excel", {
-        method: "POST", 
+        method: "POST",
       });
-  
+
       const blob = await response.blob();
 
       const downloadLink = URL.createObjectURL(blob);
-  
+
       const a = document.createElement("a");
       a.href = downloadLink;
       a.download = "excel.xlsx";
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
-  
+
       URL.revokeObjectURL(downloadLink);
-      toast.success("Excel successfully exported ")
+      toast.success("Excel successfully exported ");
     } catch (error) {
       console.error("Error downloading file:", error);
-      toast.error("Failed to export excel")
+      toast.error("Failed to export excel");
     }
   };
-  
 
   const handleTog_edit = async (_id) => {
     console.log(_id);
     try {
       const response = await getOperationById(_id);
       console.log("get", response.data.service);
-      const data = response.data.service; 
+      const data = response.data.service;
       setValues({
         ...values,
         name: data.Name,
@@ -287,7 +285,12 @@ const Form = () => {
         </div>
       </div>
       <div>
-        <button className="btn btn-secondary mt-3 mb-3" onClick={handleDownload}>Export Excel</button>
+        <button
+          className="btn btn-secondary mt-3 mb-3"
+          onClick={handleDownload}
+        >
+          Export Excel
+        </button>
         <h2>Details List</h2>
         <table className="table">
           <thead>
