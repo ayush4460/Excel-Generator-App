@@ -66,6 +66,7 @@ const Form = () => {
       console.log("Data updated successfully!");
       toast.success("Detail Successfully updated");
       fetchData();
+      setValues(initialState());
     } catch (error) {
       console.error("Error while updating data:", error.message);
       toast.error("Failed to update detail");
